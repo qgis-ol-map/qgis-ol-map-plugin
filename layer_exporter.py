@@ -1,0 +1,50 @@
+from qgis._core import (
+    QgsLayerTreeLayer,
+)
+from typing import Any
+from urllib.parse import parse_qs
+
+JsonDict = dict[str, Any]
+
+
+def layer_to_dict(layerNode: QgsLayerTreeLayer) -> JsonDict:
+    if is_xyz_layer(layerNode):
+        return xyz_layer_to_dict(layerNode)
+    return {}
+
+
+def layer_commons_to_dict(layerNode: QgsLayerTreeLayer) -> JsonDict:
+    layer = layerNode.layer()
+    return {
+        "title": layer.name(),
+        "opacity": layer.opacity(),
+        "visible": layerNode.isVisible(),
+        "crs": layer.crs().authid(),
+    }
+
+
+def is_xyz_layer(layerNode: QgsLayerTreeLayer) -> bool:
+    layer = layerNode.layer()
+    providerType = layer.providerType().lower()
+    if providerType != "wms":
+        return False
+
+    source = layer.source()
+    layer_props = parse_qs(source)
+
+    if "type" in layer_props and layer_props["type"][0] == "xyz":
+        return True
+
+    return False
+
+
+def xyz_layer_to_dict(layerNode: QgsLayerTreeLayer) -> JsonDict:
+    layer = layerNode.layer()
+    source = layer.source()
+    layer_props = parse_qs(source)
+    url = layer_props["url"][0]
+    return {
+        "type": "xyz",
+        **layer_commons_to_dict(layerNode),
+        "url": url,
+    }

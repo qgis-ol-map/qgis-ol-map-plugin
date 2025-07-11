@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/plugins/qgis_open_layers_map" >
+        <file>icon.png</file>
+    </qresource>
+</RCC>
