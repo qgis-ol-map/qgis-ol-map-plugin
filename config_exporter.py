@@ -9,8 +9,8 @@ from qgis._core import (
 from typing import Any
 from pathlib import Path
 import json
-from .layer_exporter import layer_to_dict
-
+from .layer_exporter import LayerExporter
+from itertools import count
 
 JsonDict = dict[str, Any]
 
@@ -18,6 +18,8 @@ JsonDict = dict[str, Any]
 class ProjectExporter:
     def __init__(self, root: QgsLayerTree) -> None:
         self.root = root
+        self.counter = count()
+        self.layer_exporter = LayerExporter(root, self.counter)
 
     def export(self, target_path: str):
         data = self.to_dict()
@@ -34,12 +36,13 @@ class ProjectExporter:
         }
 
     def layer_to_dict(self, layerNode: QgsLayerTreeLayer) -> JsonDict:
-        return layer_to_dict(self.root, layerNode)
+        return self.layer_exporter.layer_to_dict(layerNode)
 
     def group_to_dict(self, groupNode: QgsLayerTreeGroup) -> JsonDict:
         return {
             "type": "group",
             "title": groupNode.name(),
+            "index": next(self.counter),
             "visible": groupNode.isVisible(),
             "layers": self.children_to_dict(groupNode.children()),
         }
