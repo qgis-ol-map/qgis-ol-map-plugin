@@ -34,7 +34,7 @@ class ProjectExporter:
         }
 
     def layer_to_dict(self, layerNode: QgsLayerTreeLayer) -> JsonDict:
-        return layer_to_dict(layerNode)
+        return layer_to_dict(self.root, layerNode)
 
     def group_to_dict(self, groupNode: QgsLayerTreeGroup) -> JsonDict:
         return {
