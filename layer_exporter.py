@@ -2,9 +2,14 @@ from qgis._core import QgsLayerTreeLayer, QgsLayerTree
 from typing import Any, Iterator
 from urllib.parse import parse_qs
 from .data_exporter import DataExporter
+from .style_exporter import extract_style
+import logging
+
 
 JsonDict = dict[str, Any]
 
+
+logger = logging.getLogger(__name__)
 
 class LayerExporter:
     def __init__(self, root: QgsLayerTree, counter: Iterator, data_exporter: DataExporter) -> None:
@@ -32,6 +37,7 @@ class LayerExporter:
             error = {
                 "error": str(ex),
             }
+            logger.exception("Error exporting layer")
 
         return {
             "type": "unknown",
@@ -188,4 +194,5 @@ class LayerExporter:
             "type": "geojson",
             **self.layer_commons_to_dict(layerNode),
             "url": self.data_exporter.process_url(url),
+            "style": extract_style(layerNode),
         }
