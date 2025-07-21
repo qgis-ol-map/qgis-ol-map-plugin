@@ -31,6 +31,11 @@ from .resources import *
 # Import the code for the dialog
 from .qgis_open_layers_map_dialog import QgisOpenLayersMapDialog
 import os.path
+from . import project_initializer
+from .config_exporter import ProjectExporter
+
+
+DEBUG = True
 
 
 class QgisOpenLayersMap:
@@ -191,6 +196,10 @@ class QgisOpenLayersMap:
             self.dlg = QgisOpenLayersMapDialog()
             self.dlg.finished.connect(self.final_task)
 
+            self.dlg.project_dir_widget.fileChanged.connect(self.dir_changed)
+
+        self.validate_selected_dir()
+
         # show the dialog
         self.dlg.open()
 
@@ -202,22 +211,56 @@ class QgisOpenLayersMap:
             # substitute with your code.
             # pass
 
+    def set_accept_button_enabled(self, value: bool):
+        for button in self.dlg.button_box.buttons():
+            if self.dlg.button_box.buttonRole(button) == self.dlg.button_box.AcceptRole:
+                button.setEnabled(value)
+
+    def validate_selected_dir(self):
+        project_dir_path = self.dlg.project_dir_widget.filePath()
+
+        if project_initializer.is_project(project_dir_path):
+            self.set_accept_button_enabled(True)
+            return
+
+        if project_initializer.is_empty(project_dir_path):
+            self.set_accept_button_enabled(True)
+            return
+
+        self.set_accept_button_enabled(False)
+
+    def dir_changed(self, result):
+        self.validate_selected_dir()
+
     def final_task(self, result):
         if result:
             self.save_config()
 
     def save_config(self):
-        target_path = self.dlg.json_file_widget.filePath()
-        data_dir_path = self.dlg.data_dir_widget.filePath()
+        project_dir_path = self.dlg.project_dir_widget.filePath()
+
+        if project_initializer.is_empty(project_dir_path):
+            project_initializer.initialize_project(project_dir_path)
+
+        config_target_path = str(project_dir_path).removesuffix("/") + "/src/config/config.json"
+        data_dir_path = str(project_dir_path).removesuffix("/") + "/public/data"
+
+        os.makedirs(data_dir_path, exist_ok=True)
+        os.makedirs(os.path.dirname(config_target_path), exist_ok=True)
 
         qgis_instance = QgsProject.instance()
         root = qgis_instance.layerTreeRoot()
 
-        from .config_exporter import ProjectExporter
-        exporter = ProjectExporter(root, target_path, data_dir_path)
+        exporter = ProjectExporter(root, config_target_path, data_dir_path)
         exporter.export()
 
-        from qgis.PyQt.QtCore import pyqtRemoveInputHook
-        import ipdb
-        pyqtRemoveInputHook()
-        ipdb.set_trace()
+        if DEBUG:
+            from qgis.PyQt.QtCore import pyqtRemoveInputHook
+
+            try:
+                import ipdb as pdb
+            except ImportError:
+                import pdb
+
+            pyqtRemoveInputHook()
+            pdb.set_trace()

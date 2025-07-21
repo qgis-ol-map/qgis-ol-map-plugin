@@ -17,33 +17,12 @@
       <item>
         <widget class="QLabel" name="label">
           <property name="text">
-            <string>Output path (must be a &quot;.json&quot; file):</string>
+            <string>Project folder path (must be a folder):</string>
           </property>
         </widget>
       </item>
       <item>
-        <widget class="QgsFileWidget" name="json_file_widget">
-          <property name="accessibleName">
-            <string />
-          </property>
-          <property name="filter">
-            <string>*.json</string>
-          </property>
-          <property name="storageMode">
-            <enum>QgsFileWidget::SaveFile</enum>
-          </property>
-        </widget>
-      </item>
-
-      <item>
-        <widget class="QLabel" name="label">
-          <property name="text">
-            <string>Data folder path (must be a folder):</string>
-          </property>
-        </widget>
-      </item>
-      <item>
-        <widget class="QgsFileWidget" name="data_dir_widget">
+        <widget class="QgsFileWidget" name="project_dir_widget">
           <property name="accessibleName">
             <string />
           </property>
