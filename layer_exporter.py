@@ -18,6 +18,10 @@ class LayerExporter:
                 return self.wmts_layer_to_dict(layerNode)
             if self.is_wms_layer(layerNode):
                 return self.wms_layer_to_dict(layerNode)
+            if self.is_kml_layer(layerNode):
+                return self.kml_layer_to_dict(layerNode)
+            if self.is_geojson_layer(layerNode):
+                return self.geojson_layer_to_dict(layerNode)
 
             error = {
                 "error": "Unknown layer type",
@@ -95,6 +99,34 @@ class LayerExporter:
 
         return False
 
+    def is_kml_layer(self, layerNode: QgsLayerTreeLayer) -> bool:
+        layer = layerNode.layer()
+        providerType = layer.providerType().lower()
+        if providerType != "ogr":
+            return False
+
+        source = layer.source()
+        url = source.split("|")[0]
+
+        if url.lower().endswith(".kml"):
+            return True
+
+        return False
+
+    def is_geojson_layer(self, layerNode: QgsLayerTreeLayer) -> bool:
+        layer = layerNode.layer()
+        providerType = layer.providerType().lower()
+        if providerType != "ogr":
+            return False
+
+        source = layer.source()
+        url = source.split("|")[0]
+
+        if url.lower().endswith(".geojson"):
+            return True
+
+        return False
+
     def xyz_layer_to_dict(self, layerNode: QgsLayerTreeLayer) -> JsonDict:
         layer = layerNode.layer()
         source = layer.source()
@@ -130,4 +162,28 @@ class LayerExporter:
             "url": url,
             "layer": layer_props["layers"][0],
             "format": layer_props["format"][0],
+        }
+
+    def kml_layer_to_dict(self, layerNode: QgsLayerTreeLayer) -> JsonDict:
+        layer = layerNode.layer()
+        source = layer.source()
+        props = source.split("|")
+        url = props[0]
+
+        return {
+            "type": "kml",
+            **self.layer_commons_to_dict(layerNode),
+            "url": url,
+        }
+
+    def geojson_layer_to_dict(self, layerNode: QgsLayerTreeLayer) -> JsonDict:
+        layer = layerNode.layer()
+        source = layer.source()
+        props = source.split("|")
+        url = props[0]
+
+        return {
+            "type": "geojson",
+            **self.layer_commons_to_dict(layerNode),
+            "url": url,
         }
