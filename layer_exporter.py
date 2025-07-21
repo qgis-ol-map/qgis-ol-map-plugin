@@ -1,14 +1,16 @@
 from qgis._core import QgsLayerTreeLayer, QgsLayerTree
 from typing import Any, Iterator
 from urllib.parse import parse_qs
+from .data_exporter import DataExporter
 
 JsonDict = dict[str, Any]
 
 
 class LayerExporter:
-    def __init__(self, root: QgsLayerTree, counter: Iterator) -> None:
+    def __init__(self, root: QgsLayerTree, counter: Iterator, data_exporter: DataExporter) -> None:
         self.root = root
         self.counter = counter
+        self.data_exporter = data_exporter
 
     def layer_to_dict(self, layerNode: QgsLayerTreeLayer) -> JsonDict:
         try:
@@ -173,7 +175,7 @@ class LayerExporter:
         return {
             "type": "kml",
             **self.layer_commons_to_dict(layerNode),
-            "url": url,
+            "url": self.data_exporter.process_url(url),
         }
 
     def geojson_layer_to_dict(self, layerNode: QgsLayerTreeLayer) -> JsonDict:
@@ -185,5 +187,5 @@ class LayerExporter:
         return {
             "type": "geojson",
             **self.layer_commons_to_dict(layerNode),
-            "url": url,
+            "url": self.data_exporter.process_url(url),
         }

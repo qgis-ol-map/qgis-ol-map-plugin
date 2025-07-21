@@ -207,13 +207,15 @@ class QgisOpenLayersMap:
             self.save_config()
 
     def save_config(self):
-        target_path = self.dlg.file_widget.filePath()
+        target_path = self.dlg.json_file_widget.filePath()
+        data_dir_path = self.dlg.data_dir_widget.filePath()
+
         qgis_instance = QgsProject.instance()
         root = qgis_instance.layerTreeRoot()
 
         from .config_exporter import ProjectExporter
-        exporter = ProjectExporter(root)
-        exporter.export(target_path)
+        exporter = ProjectExporter(root, target_path, data_dir_path)
+        exporter.export()
 
         from qgis.PyQt.QtCore import pyqtRemoveInputHook
         import ipdb

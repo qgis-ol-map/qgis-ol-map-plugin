@@ -10,20 +10,22 @@ from typing import Any
 from pathlib import Path
 import json
 from .layer_exporter import LayerExporter
+from .data_exporter import DataExporter
 from itertools import count
 
 JsonDict = dict[str, Any]
 
 
 class ProjectExporter:
-    def __init__(self, root: QgsLayerTree) -> None:
+    def __init__(self, root: QgsLayerTree, target_path: str, data_dir_path: str) -> None:
         self.root = root
         self.counter = count()
-        self.layer_exporter = LayerExporter(root, self.counter)
+        self.layer_exporter = LayerExporter(root, self.counter, DataExporter(data_dir_path))
+        self.target_path = target_path
 
-    def export(self, target_path: str):
+    def export(self):
         data = self.to_dict()
-        path = Path(target_path)
+        path = Path(self.target_path)
         with path.open("w") as f:
             json.dump(data, f, indent=4)
 
