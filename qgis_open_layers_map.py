@@ -28,6 +28,7 @@ from qgis.core import QgsProject
 
 # Initialize Qt resources from file resources.py
 from .resources import *
+
 # Import the code for the dialog
 from .qgis_open_layers_map_dialog import QgisOpenLayersMapDialog
 import os.path
@@ -54,11 +55,10 @@ class QgisOpenLayersMap:
         # initialize plugin directory
         self.plugin_dir = os.path.dirname(__file__)
         # initialize locale
-        locale = QSettings().value('locale/userLocale')[0:2]
+        locale = QSettings().value("locale/userLocale")[0:2]
         locale_path = os.path.join(
-            self.plugin_dir,
-            'i18n',
-            'QgisOpenLayersMap_{}.qm'.format(locale))
+            self.plugin_dir, "i18n", "QgisOpenLayersMap_{}.qm".format(locale)
+        )
 
         if os.path.exists(locale_path):
             self.translator = QTranslator()
@@ -67,7 +67,7 @@ class QgisOpenLayersMap:
 
         # Declare instance attributes
         self.actions = []
-        self.menu = self.tr(u'&QGIS Open Layers Map')
+        self.menu = self.tr("&QGIS Open Layers Map")
 
         # Check if plugin was started the first time in current QGIS session
         # Must be set in initGui() to survive plugin reloads
@@ -86,8 +86,7 @@ class QgisOpenLayersMap:
         :rtype: QString
         """
         # noinspection PyTypeChecker,PyArgumentList,PyCallByClass
-        return QCoreApplication.translate('QgisOpenLayersMap', message)
-
+        return QCoreApplication.translate("QgisOpenLayersMap", message)
 
     def add_action(
         self,
@@ -99,7 +98,8 @@ class QgisOpenLayersMap:
         add_to_toolbar=True,
         status_tip=None,
         whats_this=None,
-        parent=None):
+        parent=None,
+    ):
         """Add a toolbar icon to the toolbar.
 
         :param icon_path: Path to the icon for this action. Can be a resource
@@ -155,9 +155,7 @@ class QgisOpenLayersMap:
             self.iface.addToolBarIcon(action)
 
         if add_to_menu:
-            self.iface.addPluginToMenu(
-                self.menu,
-                action)
+            self.iface.addPluginToMenu(self.menu, action)
 
         self.actions.append(action)
 
@@ -166,25 +164,22 @@ class QgisOpenLayersMap:
     def initGui(self):
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
 
-        icon_path = ':/plugins/qgis_open_layers_map/icon.png'
+        icon_path = ":/plugins/qgis_open_layers_map/icon.png"
         self.add_action(
             icon_path,
-            text=self.tr(u''),
+            text=self.tr(""),
             callback=self.run,
-            parent=self.iface.mainWindow())
+            parent=self.iface.mainWindow(),
+        )
 
         # will be set False in run()
         self.first_start = True
 
-
     def unload(self):
         """Removes the plugin menu item and icon from QGIS GUI."""
         for action in self.actions:
-            self.iface.removePluginMenu(
-                self.tr(u'&QGIS Open Layers Map'),
-                action)
+            self.iface.removePluginMenu(self.tr("&QGIS Open Layers Map"), action)
             self.iface.removeToolBarIcon(action)
-
 
     def run(self):
         """Run method that performs all the real work"""
@@ -207,9 +202,9 @@ class QgisOpenLayersMap:
         # result = self.dlg.exec_()
         # See if OK was pressed
         # if result:
-            # Do something useful here - delete the line containing pass and
-            # substitute with your code.
-            # pass
+        # Do something useful here - delete the line containing pass and
+        # substitute with your code.
+        # pass
 
     def set_accept_button_enabled(self, value: bool):
         for button in self.dlg.button_box.buttons():
@@ -220,13 +215,28 @@ class QgisOpenLayersMap:
         project_dir_path = self.dlg.project_dir_widget.filePath()
 
         if project_initializer.is_project(project_dir_path):
+            self.dlg.validationStatus.setText(
+                "Existing QGIS OpenLayers Map project selected.\n"
+                "Configuration and public/data files will be overwritten.\n"
+                "Configuration override file will be kept intact."
+            )
             self.set_accept_button_enabled(True)
             return
 
         if project_initializer.is_empty(project_dir_path):
+            self.dlg.validationStatus.setText(
+                "Empty directory selected.\n"
+                "New QGIS OpenLayers Map project will be created.\n"
+                "Configuration and public/data files will be written.\n"
+            )
             self.set_accept_button_enabled(True)
             return
 
+        self.dlg.validationStatus.setText(
+            "<font color=\"red\">"
+            "Please select an existing QGIS OpenLayers Map project or an empty directory."
+            "</font>"
+        )
         self.set_accept_button_enabled(False)
 
     def dir_changed(self, result):
@@ -242,7 +252,9 @@ class QgisOpenLayersMap:
         if project_initializer.is_empty(project_dir_path):
             project_initializer.initialize_project(project_dir_path)
 
-        config_target_path = str(project_dir_path).removesuffix("/") + "/src/config/config.json"
+        config_target_path = (
+            str(project_dir_path).removesuffix("/") + "/src/config/config.json"
+        )
         data_dir_path = str(project_dir_path).removesuffix("/") + "/public/data"
 
         os.makedirs(data_dir_path, exist_ok=True)

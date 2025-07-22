@@ -21,6 +21,7 @@
           </property>
         </widget>
       </item>
+
       <item>
         <widget class="QgsFileWidget" name="project_dir_widget">
           <property name="accessibleName">
@@ -29,6 +30,11 @@
           <property name="storageMode">
             <enum>QgsFileWidget::GetDirectory</enum>
           </property>
+        </widget>
+      </item>
+
+      <item>
+        <widget class="QLabel" name="validationStatus">
         </widget>
       </item>
 
@@ -50,6 +56,7 @@
           </property>
         </widget>
       </item>
+
     </layout>
   </widget>
   <resources />
