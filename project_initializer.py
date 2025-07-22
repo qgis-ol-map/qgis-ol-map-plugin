@@ -8,8 +8,8 @@ import urllib.request
 
 ID_FILENAME = ".qgis-ol-map"
 
-GIT_OWNER = "wlatanowicz"
-GIT_REPO = "qgis-ol-map"
+GIT_OWNER = "qgis-ol-map"
+GIT_REPO = "qgis-ol-map-template"
 
 SKIP = object()
 
