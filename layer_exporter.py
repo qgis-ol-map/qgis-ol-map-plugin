@@ -4,9 +4,28 @@ from urllib.parse import parse_qs
 from .data_exporter import DataExporter
 from .style_exporter import extract_style
 import logging
-
+from shlex import shlex
 
 JsonDict = dict[str, Any]
+
+
+def parse_kv_pairs(text, item_sep=",", value_sep="="):
+    """Parse key-value pairs from a shell-like text.
+    source: https://stackoverflow.com/a/38738997
+    """
+    # initialize a lexer, in POSIX mode (to properly handle escaping)
+    lexer = shlex(text, posix=True)
+    # set ',' as whitespace for the lexer
+    # (the lexer will use this character to separate words)
+    lexer.whitespace = item_sep
+    # include '=' as a word character 
+    # (this is done so that the lexer returns a list of key-value pairs)
+    # (if your option key or value contains any unquoted special character, you will need to add it here)
+    lexer.wordchars += value_sep
+    # then we separate option keys and values to build the resulting dictionary
+    # (maxsplit is required to make sure that '=' in value will not be a problem)
+    return dict(word.split(value_sep, maxsplit=1) for word in lexer)
+
 
 
 logger = logging.getLogger(__name__)
@@ -29,6 +48,8 @@ class LayerExporter:
                 return self.kml_layer_to_dict(layerNode)
             if self.is_geojson_layer(layerNode):
                 return self.geojson_layer_to_dict(layerNode)
+            if self.is_wfs_layer(layerNode):
+                return self.wfs_layer_to_dict(layerNode)
 
             error = {
                 "error": "Unknown layer type",
@@ -135,6 +156,14 @@ class LayerExporter:
 
         return False
 
+    def is_wfs_layer(self, layerNode: QgsLayerTreeLayer) -> bool:
+        layer = layerNode.layer()
+        providerType = layer.providerType().lower()
+        if providerType == "wfs":
+            return True
+
+        return False
+
     def xyz_layer_to_dict(self, layerNode: QgsLayerTreeLayer) -> JsonDict:
         layer = layerNode.layer()
         source = layer.source()
@@ -195,4 +224,24 @@ class LayerExporter:
             **self.layer_commons_to_dict(layerNode),
             "url": self.data_exporter.process_url(url),
             "style": extract_style(layerNode),
+        }
+
+    def wfs_layer_to_dict(self, layerNode: QgsLayerTreeLayer) -> JsonDict:
+        layer = layerNode.layer()
+        source = layer.source()
+        props = parse_kv_pairs(source, item_sep=" ")
+
+        url = props["url"]
+        version = props["version"]
+
+        if version not in ("1.0.0", "1.1.0", "2.0.0"):
+            version = "1.1.0"
+
+        return {
+            "type": "wfs",
+            **self.layer_commons_to_dict(layerNode),
+            "url": self.data_exporter.process_url(url),
+            "style": extract_style(layerNode),
+            "layer": props["typename"],
+            "version": version,
         }
