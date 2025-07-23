@@ -27,7 +27,9 @@ class ProjectExporter:
         data = self.to_dict()
         path = Path(self.target_path)
         with path.open("w") as f:
+            f.write("export default ")
             json.dump(data, f, indent=4)
+            f.write(";\n")
 
     def to_dict(self) -> JsonDict:
         return {

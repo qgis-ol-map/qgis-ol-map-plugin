@@ -233,7 +233,7 @@ class QgisOpenLayersMap:
             return
 
         self.dlg.validationStatus.setText(
-            "<font color=\"red\">"
+            '<font color="red">'
             "Please select an existing QGIS OpenLayers Map project or an empty directory."
             "</font>"
         )
@@ -253,7 +253,7 @@ class QgisOpenLayersMap:
             project_initializer.initialize_project(project_dir_path)
 
         config_target_path = (
-            str(project_dir_path).removesuffix("/") + "/src/config/config.json"
+            str(project_dir_path).removesuffix("/") + "/config/config.ts"
         )
         data_dir_path = str(project_dir_path).removesuffix("/") + "/public/data"
 
