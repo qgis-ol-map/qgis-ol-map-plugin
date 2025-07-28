@@ -34,9 +34,15 @@ from .qgis_open_layers_map_dialog import QgisOpenLayersMapDialog
 import os.path
 from . import project_initializer
 from .config_exporter import ProjectExporter
+import os
+from typing import Any
 
 
-DEBUG = True
+def to_bool(value: Any):
+    return str(value)[:1].lower() in ("y", "1", "t")
+
+
+DEBUG = to_bool(os.environ.get("QGIS_OL_MAP_DEBUG", "false"))
 
 
 class QgisOpenLayersMap:
