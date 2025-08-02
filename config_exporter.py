@@ -1,27 +1,32 @@
-from qgis._core import (
+from qgis.core import (
     QgsLayerTreeGroup,
     QgsLayerTreeLayer,
     QgsLayerTree,
     QgsLayerTreeNode,
     QgsCoordinateReferenceSystem,
     Qgis,
+    QgsProject,
 )
+from qgis.gui import QgsMapCanvas
 from typing import Any
 from pathlib import Path
 import json
 from .layer_exporter import LayerExporter
 from .data_exporter import DataExporter
 from itertools import count
+from .view_exporter import export_viewport
 
 JsonDict = dict[str, Any]
 
 
 class ProjectExporter:
-    def __init__(self, root: QgsLayerTree, target_path: str, data_dir_path: str) -> None:
+    def __init__(self, root: QgsLayerTree, qgis_instance: QgsProject, map_canvas: QgsMapCanvas, target_path: str, data_dir_path: str) -> None:
         self.root = root
         self.counter = count()
         self.layer_exporter = LayerExporter(root, self.counter, DataExporter(data_dir_path))
         self.target_path = target_path
+        self.qgis_instance = qgis_instance
+        self.map_canvas = map_canvas
 
     def export(self):
         data = self.to_dict()
@@ -36,6 +41,7 @@ class ProjectExporter:
             "epsgs": self.epsgs_to_dict(
                 [layerNode.layer().crs() for layerNode in self.root.findLayers()]
             ),
+            "viewport": export_viewport(self.qgis_instance, self.map_canvas),
             "layers": self.children_to_dict(self.root.children()),
         }
 

@@ -268,8 +268,9 @@ class QgisOpenLayersMap:
 
         qgis_instance = QgsProject.instance()
         root = qgis_instance.layerTreeRoot()
+        map_canvas = self.iface.mapCanvas()
 
-        exporter = ProjectExporter(root, config_target_path, data_dir_path)
+        exporter = ProjectExporter(root, qgis_instance, map_canvas, config_target_path, data_dir_path)
         exporter.export()
 
         if DEBUG:
