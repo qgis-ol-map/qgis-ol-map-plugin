@@ -27,27 +27,27 @@ def extract_unit(value: str) -> str:
 
 STYLE_MAPPING: dict[str, tuple[str, str]] = {
     "symbol_size": (
-        "./renderer-v2/symbols/symbol/layer/Option/Option[@name='size']",
+        "./renderer-v2/symbols/symbol[@type='marker']/layer/Option/Option[@name='size']",
         "value",
     ),
     "symbol_size_unit": (
-        "./renderer-v2/symbols/symbol/layer/Option/Option[@name='size_unit']",
+        "./renderer-v2/symbols/symbol[@type='marker']/layer/Option/Option[@name='size_unit']",
         "value",
     ),
     "symbol_fill_color": (
-        "./renderer-v2/symbols/symbol/layer/Option/Option[@name='color']",
+        "./renderer-v2/symbols/symbol[@type='marker']/layer/Option/Option[@name='color']",
         "value",
     ),
     "symbol_stroke_color": (
-        "./renderer-v2/symbols/symbol/layer/Option/Option[@name='outline_color']",
+        "./renderer-v2/symbols/symbol[@type='marker']/layer/Option/Option[@name='outline_color']",
         "value",
     ),
     "symbol_stroke_width": (
-        "./renderer-v2/symbols/symbol/layer/Option/Option[@name='outline_width']",
+        "./renderer-v2/symbols/symbol[@type='marker']/layer/Option/Option[@name='outline_width']",
         "value",
     ),
     "symbol_stroke_width_unit": (
-        "./renderer-v2/symbols/symbol/layer/Option/Option[@name='outline_width_unit']",
+        "./renderer-v2/symbols/symbol[@type='marker']/layer/Option/Option[@name='outline_width_unit']",
         "value",
     ),
     "label_text_field": (
@@ -94,6 +94,22 @@ STYLE_MAPPING: dict[str, tuple[str, str]] = {
         "./labeling/settings/text-style/text-buffer",
         "bufferSizeUnits",
     ),
+    "polygon_fill_color": (
+        "./renderer-v2/symbols/symbol[@type='fill']/layer/Option/Option[@name='color']",
+        "value",
+    ),
+    "polygon_stroke_color": (
+        "./renderer-v2/symbols/symbol[@type='fill']/layer/Option/Option[@name='outline_color']",
+        "value",
+    ),
+    "polygon_stroke_width": (
+        "./renderer-v2/symbols/symbol[@type='fill']/layer/Option/Option[@name='outline_width']",
+        "value",
+    ),
+    "polygon_stroke_width_unit": (
+        "./renderer-v2/symbols/symbol[@type='fill']/layer/Option/Option[@name='outline_width_unit']",
+        "value",
+    ),
 }
 
 VALUE_CONVERTERS = {
@@ -114,6 +130,10 @@ VALUE_CONVERTERS = {
     "label_outline_color": extract_color,
     "label_outline_width": float,
     "label_outline_width_unit": extract_unit,
+    "polygon_fill_color": extract_color,
+    "polygon_stroke_color": extract_color,
+    "polygon_stroke_width": float,
+    "polygon_stroke_width_unit": extract_unit,
 }
 
 
