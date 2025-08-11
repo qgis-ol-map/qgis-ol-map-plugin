@@ -110,6 +110,18 @@ STYLE_MAPPING: dict[str, tuple[str, str]] = {
         "./renderer-v2/symbols/symbol[@type='fill']/layer/Option/Option[@name='outline_width_unit']",
         "value",
     ),
+    "line_stroke_color": (
+        "./renderer-v2/symbols/symbol[@type='line']/layer/Option/Option[@name='line_color']",
+        "value",
+    ),
+    "line_stroke_width": (
+        "./renderer-v2/symbols/symbol[@type='line']/layer/Option/Option[@name='line_width']",
+        "value",
+    ),
+    "line_stroke_width_unit": (
+        "./renderer-v2/symbols/symbol[@type='line']/layer/Option/Option[@name='line_width_unit']",
+        "value",
+    ),
 }
 
 VALUE_CONVERTERS = {
@@ -134,6 +146,9 @@ VALUE_CONVERTERS = {
     "polygon_stroke_color": extract_color,
     "polygon_stroke_width": float,
     "polygon_stroke_width_unit": extract_unit,
+    "line_stroke_color": extract_color,
+    "line_stroke_width": float,
+    "line_stroke_width_unit": extract_unit,
 }
 
 
