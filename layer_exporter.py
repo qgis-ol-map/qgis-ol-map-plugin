@@ -50,6 +50,8 @@ class LayerExporter:
                 return self.geojson_layer_to_dict(layerNode)
             if self.is_wfs_layer(layerNode):
                 return self.wfs_layer_to_dict(layerNode)
+            if self.is_geotiff_layer(layerNode):
+                return self.geotiff_layer_to_dict(layerNode)
 
             error = {
                 "error": "Unknown layer type",
@@ -164,6 +166,18 @@ class LayerExporter:
 
         return False
 
+    def is_geotiff_layer(self, layerNode: QgsLayerTreeLayer) -> bool:
+        layer = layerNode.layer()
+        providerType = layer.providerType().lower()
+        source = layer.source().lower()
+        file_extension = source.split(".")[-1]
+        tiff_extensions = ["tif", "tiff"]
+
+        if providerType == "gdal" and file_extension in tiff_extensions:
+            return True
+
+        return False
+
     def xyz_layer_to_dict(self, layerNode: QgsLayerTreeLayer) -> JsonDict:
         layer = layerNode.layer()
         source = layer.source()
@@ -244,4 +258,14 @@ class LayerExporter:
             "style": extract_style(layerNode),
             "layer": props["typename"],
             "version": version,
+        }
+
+    def geotiff_layer_to_dict(self, layerNode: QgsLayerTreeLayer) -> JsonDict:
+        layer = layerNode.layer()
+        url = layer.source()
+
+        return {
+            "type": "geotiff",
+            **self.layer_commons_to_dict(layerNode),
+            "url": self.data_exporter.process_url(url),
         }
