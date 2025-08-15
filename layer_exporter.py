@@ -187,6 +187,8 @@ class LayerExporter:
             "type": "xyz",
             **self.layer_commons_to_dict(layerNode),
             "url": url,
+            "minZoom": layer_props.get("zmin", [None])[0],
+            "maxZoom": layer_props.get("zmax", [None])[0],
         }
 
     def wmts_layer_to_dict(self, layerNode: QgsLayerTreeLayer) -> JsonDict:
