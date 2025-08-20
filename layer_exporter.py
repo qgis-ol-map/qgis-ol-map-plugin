@@ -1,5 +1,5 @@
 from qgis._core import QgsLayerTreeLayer, QgsLayerTree
-from typing import Any, Iterator
+from typing import Any, Iterator, Optional
 from urllib.parse import parse_qs
 from .data_exporter import DataExporter
 from .style_exporter import extract_style
@@ -27,6 +27,11 @@ def parse_kv_pairs(text, item_sep=",", value_sep="="):
     return dict(word.split(value_sep, maxsplit=1) for word in lexer)
 
 
+def safe_to_int(value: Any) -> Optional[int]:
+    try:
+        return int(value)
+    except ValueError:
+        return None
 
 logger = logging.getLogger(__name__)
 
@@ -187,8 +192,8 @@ class LayerExporter:
             "type": "xyz",
             **self.layer_commons_to_dict(layerNode),
             "url": url,
-            "minZoom": layer_props.get("zmin", [None])[0],
-            "maxZoom": layer_props.get("zmax", [None])[0],
+            "minZoom": safe_to_int(layer_props.get("zmin", [None])[0]),
+            "maxZoom": safe_to_int(layer_props.get("zmax", [None])[0]),
         }
 
     def wmts_layer_to_dict(self, layerNode: QgsLayerTreeLayer) -> JsonDict:
