@@ -1,42 +1,112 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QGIS Open Layers Map Plugin</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; line-height: 1.6; }
+        h1 { color: #2e7d32; border-bottom: 2px solid #2e7d32; padding-bottom: 10px; }
+        h2 { color: #388e3c; margin-top: 30px; }
+        h3 { color: #4caf50; }
+        .feature-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin: 20px 0; }
+        .feature-item { background: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid #4caf50; }
+        .quick-start { background: #e8f5e8; padding: 20px; border-radius: 8px; margin: 20px 0; }
+        .support-info { background: #fff3e0; padding: 15px; border-radius: 8px; margin: 20px 0; }
+        code { background: #f5f5f5; padding: 2px 4px; border-radius: 3px; font-family: monospace; }
+        .version-badge { background: #2196f3; color: white; padding: 4px 8px; border-radius: 12px; font-size: 0.8em; }
+    </style>
+</head>
 <body>
-<h3>Plugin Builder Results</h3>
+    <h1>QGIS Open Layers Map Plugin</h1>
+    
+    <p><strong>Export QGIS projects as interactive OpenLayers web maps with support for multiple layer types and preserved styling.</strong></p>
+    
+    <p><span class="version-badge">Version 0.1</span> | <span class="version-badge">QGIS 3.0+</span></p>
 
-Congratulations! You just built a plugin for QGIS!<br/><br />
+    <h2>Overview</h2>
+    <p>The QGIS Open Layers Map plugin allows you to export your QGIS projects as interactive web maps using OpenLayers. It preserves your project's styling, supports various layer types, and generates a complete web application that can be shared or deployed anywhere.</p>
 
-<div id='help' style='font-size:.9em;'>
-Your plugin <b>QgisOpenLayersMap</b> was created in:<br>
-&nbsp;&nbsp;<b>/Users/wiktor/workdir/qgis-plugins/qgis_open_layers_map</b>
-<p>
-Your QGIS plugin directory is located at:<br>
-&nbsp;&nbsp;<b>/Users/wiktor/Library/Application Support/QGIS/QGIS3/profiles/default/python/plugins</b>
-<p>
-<h3>What's Next</h3>
-<ol>
-    <li>If resources.py is not present in your plugin directory, compile the resources file using pyrcc5 (simply use <b>pb_tool</b> or <b>make</b> if you have automake)
-    <li>Optionally, test the generated sources using <b>make test</b> (or run tests from your IDE)
-    <li>Copy the entire directory containing your new plugin to the QGIS plugin directory (see Notes below)
-    <li>Test the plugin by enabling it in the QGIS plugin manager
-    <li>Customize it by editing the implementation file <b>qgis_open_layers_map.py</b>
-    <li>Create your own custom icon, replacing the default <b>icon.png</b>
-    <li>Modify your user interface by opening <b>qgis_open_layers_map_dialog_base.ui</b> in Qt Designer
-</ol>
-Notes:
-<ul>
-    <li>You can use <b>pb_tool</b> to compile, deploy, and manage your plugin. Tweak the <i>pb_tool.cfg</i> file included with your plugin as you add files. Install <b>pb_tool</b> using 
-        <i>pip</i> or <i>easy_install</i>. See <b>http://loc8.cc/pb_tool</b> for more information.
-    <li>You can also use the <b>Makefile</b> to compile and deploy when you
-        make changes. This requires GNU make (gmake). The Makefile is ready to use, however you 
-        will have to edit it to add addional Python source files, dialogs, and translations.
-</ul>
-</div>
-<div style='font-size:.9em;'>
-<p>
-For information on writing PyQGIS code, see <b>http://loc8.cc/pyqgis_resources</b> for a list of resources.
-</p>
-</div>
-<p>
-&copy;2011-2019 GeoApt LLC - geoapt.com 
-</p>
+    <h2>Features</h2>
+    <div class="feature-list">
+        <div class="feature-item">
+            <h3>Multiple Layer Support</h3>
+            <p>XYZ tiles, GeoJSON, WMS, WFS, and GeoTIFFs</p>
+        </div>
+        <div class="feature-item">
+            <h3>Style Preservation</h3>
+            <p>Maintains your QGIS project styling in the web map</p>
+        </div>
+        <div class="feature-item">
+            <h3>Interactive Web Maps</h3>
+            <p>Generated maps are fully interactive with pan, zoom, and layer controls</p>
+        </div>
+        <div class="feature-item">
+            <h3>Easy Deployment</h3>
+            <p>Creates self-contained web applications</p>
+        </div>
+    </div>
+
+    <h2>Installation</h2>
+    
+    <h3>From QGIS Plugin Repository (Recommended)</h3>
+    <ol>
+        <li>Open QGIS</li>
+        <li>Go to <strong>Plugins</strong> → <strong>Manage and Install Plugins</strong></li>
+        <li>Search for "QGIS Open Layers Map"</li>
+        <li>Click <strong>Install Plugin</strong></li>
+    </ol>
+
+    <h3>Manual Installation</h3>
+    <ol>
+        <li>Download the plugin from the <a href="https://github.com/qgis-ol-map/qgis-ol-map-plugin">GitHub repository</a></li>
+        <li>Extract the ZIP file to your QGIS plugins directory</li>
+        <li>Restart QGIS</li>
+        <li>Enable the plugin in <strong>Plugins</strong> → <strong>Manage and Install Plugins</strong> → <strong>Installed</strong></li>
+    </ol>
+
+    <div class="quick-start">
+        <h2>Quick Start</h2>
+        <ol>
+            <li>Open your QGIS project with the layers you want to export</li>
+            <li>Go to <strong>Plugins</strong> → <strong>QGIS Open Layers Map</strong></li>
+            <li>Configure your export settings in the dialog</li>
+            <li>Choose an output directory</li>
+            <li>Click <strong>Export</strong> to generate your web map</li>
+            <li>Open the generated <code>index.html</code> file in a web browser</li>
+        </ol>
+    </div>
+
+    <h2>Supported Layer Types</h2>
+    <ul>
+        <li><strong>XYZ Tiles</strong> - Supports min/max zoom levels</li>
+        <li><strong>GeoJSON</strong> - Vector data with styling</li>
+        <li><strong>WMS</strong> - Web Map Service layers</li>
+        <li><strong>WFS</strong> - Web Feature Service layers</li>
+        <li><strong>GeoTIFF</strong> - Raster data</li>
+    </ul>
+
+    <h2>Requirements</h2>
+    <ul>
+        <li><strong>QGIS Version:</strong> 3.0 or higher</li>
+        <li><strong>Python:</strong> 3.6+ (included with QGIS)</li>
+        <li><strong>Web Browser:</strong> Modern browser with JavaScript support</li>
+    </ul>
+
+    <div class="support-info">
+        <h2>Support & Documentation</h2>
+        <ul>
+            <li><strong>Issues:</strong> <a href="https://github.com/qgis-ol-map/qgis-ol-map-plugin/issues">GitHub Issues</a></li>
+            <li><strong>Documentation:</strong> <a href="https://github.com/qgis-ol-map/qgis-ol-map-plugin/wiki">Project Wiki</a></li>
+            <li><strong>Email:</strong> qgis@wiktor.latanowicz.com</li>
+        </ul>
+        <p>For detailed documentation, see <strong>README.md</strong> in the plugin directory.</p>
+    </div>
+
+    <h2>License</h2>
+    <p>This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.</p>
+
+    <hr>
+    <p><small>Copyright (C) 2025 Wiktor Latanowicz | Licensed under GNU General Public License v2 or later</small></p>
 </body>
 </html>

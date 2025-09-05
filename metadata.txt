@@ -5,12 +5,12 @@
 [general]
 name=QGIS Open Layers Map
 qgisMinimumVersion=3.0
-description=This plugins generates an OpenLayers-based web page from your QGIS project
+description=Export QGIS projects as interactive OpenLayers web maps with support for multiple layer types and preserved styling
 version=0.1
 author=Wiktor Lataowicz
 email=qgis@wiktor.latanowicz.com
 
-about=Provide a brief description of the plugin and its purpose.
+about=This plugin allows you to export your QGIS projects as interactive web maps using OpenLayers. It preserves your project's styling, supports various layer types including XYZ tiles, GeoJSON, WMS, WFS, and GeoTIFFs, and generates a complete web application that can be shared or deployed anywhere.
 
 tracker=https://github.com/qgis-ol-map/qgis-ol-map-plugin/issues
 repository=https://github.com/qgis-ol-map/qgis-ol-map-plugin

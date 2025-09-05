@@ -1,32 +1,61 @@
-Plugin Builder Results
+QGIS Open Layers Map Plugin
+===========================
 
-Your plugin QgisOpenLayersMap was created in:
-    /Users/wiktor/workdir/qgis-plugins/qgis_open_layers_map
+Export QGIS projects as interactive OpenLayers web maps with support for 
+multiple layer types and preserved styling.
 
-Your QGIS plugin directory is located at:
-    /Users/wiktor/Library/Application Support/QGIS/QGIS3/profiles/default/python/plugins
+OVERVIEW
+--------
+The QGIS Open Layers Map plugin allows you to export your QGIS projects as 
+interactive web maps using OpenLayers. It preserves your project's styling, 
+supports various layer types, and generates a complete web application that 
+can be shared or deployed anywhere.
 
-What's Next:
+FEATURES
+--------
+- Multiple Layer Support: XYZ tiles, GeoJSON, WMS, WFS, and GeoTIFFs
+- Style Preservation: Maintains your QGIS project styling in the web map
+- Interactive Web Maps: Generated maps are fully interactive
+- Easy Deployment: Creates self-contained web applications
+- Configurable Output: Customizable export options and settings
 
-  * Copy the entire directory containing your new plugin to the QGIS plugin
-    directory
+INSTALLATION
+------------
+From QGIS Plugin Repository (Recommended):
+1. Open QGIS
+2. Go to Plugins → Manage and Install Plugins
+3. Search for "QGIS Open Layers Map"
+4. Click Install Plugin
 
-  * Compile the resources file using pyrcc5
+Manual Installation:
+1. Copy the entire plugin directory to your QGIS plugins directory:
+   ~/.local/share/QGIS/QGIS3/profiles/default/python/plugins (Linux)
+   ~/Library/Application Support/QGIS/QGIS3/profiles/default/python/plugins (macOS)
+   %APPDATA%\QGIS\QGIS3\profiles\default\python\plugins (Windows)
+2. Restart QGIS
+3. Enable the plugin in Plugins → Manage and Install Plugins → Installed
 
-  * Run the tests (``make test``)
+QUICK START
+-----------
+1. Open your QGIS project with the layers you want to export
+2. Go to Plugins → QGIS Open Layers Map
+3. Configure your export settings in the dialog
+4. Choose an output directory
+5. Click Export to generate your web map
+6. Open the generated index.html file in a web browser
 
-  * Test the plugin by enabling it in the QGIS plugin manager
+REQUIREMENTS
+------------
+- QGIS Version: 3.0 or higher
+- Python: 3.6+ (included with QGIS)
+- Web Browser: Modern browser with JavaScript support
 
-  * Customize it by editing the implementation file: ``qgis_open_layers_map.py``
+SUPPORT
+-------
+- Issues: https://github.com/qgis-ol-map/qgis-ol-map-plugin/issues
+- Email: qgis@wiktor.latanowicz.com
 
-  * Create your own custom icon, replacing the default icon.png
+For detailed documentation, see README.md
 
-  * Modify your user interface by opening QgisOpenLayersMap_dialog_base.ui in Qt Designer
-
-  * You can use the Makefile to compile your Ui and resource files when
-    you make changes. This requires GNU make (gmake)
-
-For more information, see the PyQGIS Developer Cookbook at:
-http://www.qgis.org/pyqgis-cookbook/index.html
-
-(C) 2011-2018 GeoApt LLC - geoapt.com
+Copyright (C) 2025 Wiktor Latanowicz
+Licensed under GNU General Public License v2 or later
