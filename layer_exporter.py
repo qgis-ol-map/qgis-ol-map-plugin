@@ -57,6 +57,8 @@ class LayerExporter:
                 return self.wfs_layer_to_dict(layerNode)
             if self.is_geotiff_layer(layerNode):
                 return self.geotiff_layer_to_dict(layerNode)
+            if self.is_gpx_layer(layerNode):
+                return self.gpx_layer_to_dict(layerNode)
 
             error = {
                 "error": "Unknown layer type",
@@ -183,6 +185,20 @@ class LayerExporter:
 
         return False
 
+    def is_gpx_layer(self, layerNode: QgsLayerTreeLayer) -> bool:
+        layer = layerNode.layer()
+        providerType = layer.providerType().lower()
+        if providerType != "ogr":
+            return False
+
+        source = layer.source()
+        url = source.split("|")[0]
+
+        if url.lower().endswith(".gpx"):
+            return True
+
+        return False
+
     def xyz_layer_to_dict(self, layerNode: QgsLayerTreeLayer) -> JsonDict:
         layer = layerNode.layer()
         source = layer.source()
@@ -275,4 +291,17 @@ class LayerExporter:
             "type": "geotiff",
             **self.layer_commons_to_dict(layerNode),
             "url": self.data_exporter.process_url(url),
+        }
+
+    def gpx_layer_to_dict(self, layerNode: QgsLayerTreeLayer) -> JsonDict:
+        layer = layerNode.layer()
+        source = layer.source()
+        props = source.split("|")
+        url = props[0]
+
+        return {
+            "type": "gpx",
+            **self.layer_commons_to_dict(layerNode),
+            "url": self.data_exporter.process_url(url),
+            "style": extract_style(layerNode),
         }
