@@ -89,7 +89,7 @@ class LayerExporter:
         return {
             "title": layer.name(),
             "opacity": layer.opacity(),
-            "visible": layerNode.isVisible(),
+            "visible": layerNode.itemVisibilityChecked(),
             "zIndex": self.determine_z_index(layerNode),
             "index": next(self.counter),
             "crs": layer.crs().authid(),
