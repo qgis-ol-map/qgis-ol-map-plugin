@@ -59,7 +59,14 @@
 
     </layout>
   </widget>
-  <resources />
+  <customwidgets>
+    <customwidget>
+    <class>QgsFileWidget</class>
+    <extends>QWidget</extends>
+    <header>qgsfilewidget.h</header>
+    </customwidget>
+  </customwidgets>
+   <resources />
   <connections>
     <connection>
       <sender>button_box</sender>
