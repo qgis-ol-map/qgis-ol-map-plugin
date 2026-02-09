@@ -53,7 +53,8 @@ class ProjectExporter:
             "type": "group",
             "title": groupNode.name(),
             "index": next(self.counter),
-            "visible": groupNode.isVisible(),
+            "visible": groupNode.itemVisibilityChecked(),
+            "collapsed": not groupNode.isExpanded(),
             "layers": self.children_to_dict(groupNode.children()),
         }
 
