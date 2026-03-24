@@ -1,12 +1,15 @@
 from datetime import datetime
 import json
+import os
 import os.path
+import shutil
 import requests
 from typing import Any
 import zipfile
 import urllib.request
 
 ID_FILENAME = ".qgis-ol-map"
+CONFIG_OVERRIDE_PATH = "config/configOverride.ts"
 
 GIT_OWNER = "qgis-ol-map"
 GIT_REPO = "qgis-ol-map-template"
@@ -46,6 +49,37 @@ def initialize_project(target_dir: str):
     fetch_and_extract_template(info["zipball_url"], target_dir)
 
     save_project_id(target_dir, info)
+
+
+def regenerate_project(target_dir: str):
+    """Remove project contents (except config/configOverride.ts) and re-initialize from template."""
+    assert is_project(target_dir)
+
+    target_dir = str(target_dir).removesuffix("/")
+    config_override_path = os.path.join(target_dir, CONFIG_OVERRIDE_PATH)
+
+    # Backup config override if it exists
+    config_override_backup = None
+    if os.path.exists(config_override_path):
+        with open(config_override_path, "rb") as f:
+            config_override_backup = f.read()
+
+    # Remove all contents of target directory
+    for name in os.listdir(target_dir):
+        path = os.path.join(target_dir, name)
+        if os.path.isdir(path):
+            shutil.rmtree(path)
+        else:
+            os.remove(path)
+
+    # Directory is now empty, initialize fresh
+    initialize_project(target_dir)
+
+    # Restore config override
+    if config_override_backup is not None:
+        os.makedirs(os.path.dirname(config_override_path), exist_ok=True)
+        with open(config_override_path, "wb") as f:
+            f.write(config_override_backup)
 
 
 def save_project_id(target_dir: str, info: dict[str, Any]):

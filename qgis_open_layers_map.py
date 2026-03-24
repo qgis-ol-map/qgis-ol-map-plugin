@@ -226,8 +226,13 @@ class QgisOpenLayersMap:
                 "Configuration and public/data files will be overwritten.\n"
                 "Configuration override file will be kept intact."
             )
+            self.dlg.regenWithTemplateCheckBox.setVisible(True)
+            self.dlg.regenWithTemplateCheckBox.setChecked(False)
             self.set_accept_button_enabled(True)
             return
+
+        self.dlg.regenWithTemplateCheckBox.setVisible(False)
+        self.dlg.regenWithTemplateCheckBox.setChecked(False)
 
         if project_initializer.is_empty(project_dir_path):
             self.dlg.validationStatus.setText(
@@ -255,7 +260,9 @@ class QgisOpenLayersMap:
     def save_config(self):
         project_dir_path = self.dlg.project_dir_widget.filePath()
 
-        if project_initializer.is_empty(project_dir_path):
+        if project_initializer.is_project(project_dir_path) and self.dlg.regenWithTemplateCheckBox.isChecked():
+            project_initializer.regenerate_project(project_dir_path)
+        elif project_initializer.is_empty(project_dir_path):
             project_initializer.initialize_project(project_dir_path)
 
         config_target_path = (

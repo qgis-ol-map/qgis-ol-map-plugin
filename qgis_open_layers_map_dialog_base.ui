@@ -39,6 +39,14 @@
       </item>
 
       <item>
+        <widget class="QCheckBox" name="regenWithTemplateCheckBox">
+          <property name="text">
+            <string>Regenerate with the latest version of the template</string>
+          </property>
+        </widget>
+      </item>
+
+      <item>
         <widget class="QDialogButtonBox" name="button_box">
           <property name="geometry">
             <rect>
